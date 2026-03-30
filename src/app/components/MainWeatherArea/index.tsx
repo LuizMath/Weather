@@ -23,7 +23,7 @@ export function MainWeatherArea() {
       <div className="mt-10">
         <p className="text-white font-semibold">Daily forecast</p>
       </div>
-      <div className="w-[95%] text-white col-start-1 col-end-2 flex flex-row gap-3 mt-7">
+      <div className="w-[95%] text-white col-start-1 col-end-2 flex justify-between flex-row gap-3 mt-7">
         <DailyForecastCard icon={Rain} temperatures={["20", "10"]} day="Tue" />
         <DailyForecastCard icon={Rain} temperatures={["20", "10"]} day="Wed" />
         <DailyForecastCard icon={Rain} temperatures={["20", "10"]} day="Thu" />
