@@ -50,7 +50,7 @@ export function Dropdown({ title, labels, icon, sampleLabels }: DropdownProps) {
         className={clsx(
           "flex items-center justify-center w-30 gap-2 text-base cursor-pointer  px-7 rounded-lg py-1.5",
           visible ? "border border-solid border-white" : "",
-          sampleLabels ? "mt-61 bg-[hsl(243,23%,30%)]" : "bg-[hsl(243,27%,20%)]"
+          sampleLabels ? "mt-75 bg-[hsl(243,23%,30%)]" : "bg-[hsl(243,27%,20%)]"
         )}
       >
         {icon && (
@@ -101,8 +101,13 @@ export function Dropdown({ title, labels, icon, sampleLabels }: DropdownProps) {
             )}
           </Fragment>
         ))}
-        {sampleLabels?.map((sampleLabel) => (
-          <p key={sampleLabel}>{sampleLabel}</p>
+        {sampleLabels?.map((sampleLabel, i) => (
+          <p
+            className="p-1 hover:bg-[hsl(243,23%,30%)] cursor-pointer rounded-lg"
+            key={sampleLabel}
+          >
+            {sampleLabel}
+          </p>
         ))}
       </div>
     </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Header } from "./components/Header";
+import { CityContextProvider } from "./context/CityContext";
 
 const dmSans = DM_Sans({
   variable: "--font-dm",
@@ -30,10 +31,12 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${bricolageGrotesque.variable}`}
     >
-      <body className="min-h-full flex flex-col">
-        <Header />
-        {children}
-      </body>
+      <CityContextProvider>
+        <body className="min-h-full flex flex-col">
+          <Header />
+          {children}
+        </body>
+      </CityContextProvider>
     </html>
   );
 }
