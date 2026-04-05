@@ -3,17 +3,24 @@ import Image from "next/image";
 import Arrow from "../../../../public/icon-dropdown.svg";
 import clsx from "clsx";
 import CheckMark from "../../../../public/icon-checkmark.svg";
-import { Fragment, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { Options } from "@/app/utils/types/options";
 
 interface DropdownProps {
   title: string;
   icon?: string;
   labels?: { label: string; title: string[] }[];
+  setDayCode?: Dispatch<SetStateAction<number>>;
   sampleLabels?: string[];
 }
 
-export function Dropdown({ title, labels, icon, sampleLabels }: DropdownProps) {
+export function Dropdown({
+  title,
+  labels,
+  icon,
+  sampleLabels,
+  setDayCode,
+}: DropdownProps) {
   const [visible, setVisible] = useState<boolean>(false);
   const [options, setOptions] = useState<Options>({
     celsius: true,
@@ -50,7 +57,9 @@ export function Dropdown({ title, labels, icon, sampleLabels }: DropdownProps) {
         className={clsx(
           "flex items-center justify-center w-30 gap-2 text-base cursor-pointer  px-7 rounded-lg py-1.5",
           visible ? "border border-solid border-white" : "",
-          sampleLabels ? "mt-75 bg-[hsl(243,23%,30%)]" : "bg-[hsl(243,27%,20%)]"
+          sampleLabels
+            ? "mt-75 bg-[hsl(243,23%,30%)]"
+            : "bg-[hsl(243,27%,20%)]",
         )}
       >
         {icon && (
@@ -67,7 +76,7 @@ export function Dropdown({ title, labels, icon, sampleLabels }: DropdownProps) {
       <div
         className={clsx(
           "w-50 p-2 mt-3 rounded-lg bg-[hsl(243,27%,20%)] shadow-[0px_5px_15px_rgba(0,0,0,0.35)] transition-all duration-200 ease-in flex flex-col gap-2 z-99",
-          visible ? "visible opacity-100" : "invisible opacity-0"
+          visible ? "visible opacity-100" : "invisible opacity-0",
         )}
       >
         {icon && (
@@ -86,7 +95,7 @@ export function Dropdown({ title, labels, icon, sampleLabels }: DropdownProps) {
                 className={clsx(
                   "py-1.5 px-1.5 rounded-lg cursor-pointer flex items-center justify-between",
                   options[label.replace(/\//g, "") as keyof Options] &&
-                    "bg-[hsl(243,23%,30%)]"
+                    "bg-[hsl(243,23%,30%)]",
                 )}
                 key={label}
               >
@@ -103,7 +112,14 @@ export function Dropdown({ title, labels, icon, sampleLabels }: DropdownProps) {
         ))}
         {sampleLabels?.map((sampleLabel, i) => (
           <p
-            className="p-1 hover:bg-[hsl(243,23%,30%)] cursor-pointer rounded-lg"
+            className={clsx(
+              "p-1 hover:bg-[hsl(243,23%,30%)] cursor-pointer rounded-lg",
+              title === sampleLabel ? "bg-[hsl(243,23%,30%)]" : "",
+            )}
+            onClick={() => {
+              setDayCode!(i);
+              setVisible(!visible);
+            }}
             key={sampleLabel}
           >
             {sampleLabel}

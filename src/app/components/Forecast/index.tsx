@@ -11,6 +11,7 @@ import { toggleIcon } from "@/app/functions/toggleIcon";
 export function Forecast() {
   const { cityWeather } = use(CityContext);
   const [sampleLabels, setSampleLabels] = useState<string[]>();
+  const [dayCode, setDayCode] = useState<number>(0);
   const [daysTemperature, setDaysTemperature] = useState<
     { temperature: number; hour: string; icon: StaticImageData }[]
   >([]);
@@ -18,19 +19,21 @@ export function Forecast() {
     if (cityWeather.hourly) {
       const sampleLabels = [
         ...new Set(
-          cityWeather.hourly.time.map((element) => moment(element).format("L"))
+          cityWeather.hourly.time.map((element) => moment(element).format("L")),
         ),
       ];
       setSampleLabels(
-        sampleLabels.map((element) => moment(element).format("dddd"))
+        sampleLabels.map((element) => moment(element).format("dddd")),
       );
-      const index = cityWeather.hourly.time
-        .map((element) => moment(element).format("l"))
-        .findIndex((element) => moment(element).isSame(sampleLabels[0]));
-      console.log(index);
-      const lastIndex = cityWeather.hourly.time
-        .map((element) => moment(element).format("l"))
-        .findLastIndex((element) => moment(element).isSame(sampleLabels[0]));
+      const formatDate = cityWeather.hourly.time.map((element) =>
+        moment(element).format("l"),
+      );
+      const index = formatDate.findIndex((element) =>
+        moment(element).isSame(sampleLabels[dayCode]),
+      );
+      const lastIndex = formatDate.findLastIndex((element) =>
+        moment(element).isSame(sampleLabels[dayCode]),
+      );
       const daysTemperatureArray = [];
       for (let i = index; i <= lastIndex; i++) {
         daysTemperatureArray.push({
@@ -41,14 +44,18 @@ export function Forecast() {
       }
       setDaysTemperature(daysTemperatureArray);
     }
-  }, [cityWeather]);
+  }, [cityWeather, dayCode]);
   return (
     <section className="w-full h-full row-span-4 bg-[hsl(243,27%,20%)] text-white rounded-xl px-6 py-4 overflow-y-auto">
       <div className="flex items-center justify-between h-10">
         <div className="w-full">
           <h6>Hourly forescast</h6>
         </div>
-        <Dropdown title="Tuesday" sampleLabels={sampleLabels} />
+        <Dropdown
+          title={sampleLabels?.[dayCode] ?? moment().format("dddd")}
+          sampleLabels={sampleLabels}
+          setDayCode={setDayCode}
+        />
       </div>
       <ul className="mt-4 flex flex-col gap-4">
         {daysTemperature.map((dt) => (
