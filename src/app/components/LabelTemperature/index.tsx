@@ -1,9 +1,10 @@
+import clsx from "clsx";
 import Image, { StaticImageData } from "next/image";
 
 interface LabelTemperatureProps {
-  icon: StaticImageData;
-  temperature: string;
-  hour: string;
+  icon?: StaticImageData;
+  temperature?: string;
+  hour?: string;
 }
 
 export function LabelTemperature({
@@ -12,12 +13,19 @@ export function LabelTemperature({
   hour,
 }: LabelTemperatureProps) {
   return (
-    <li className="p-2 rounded-xl bg-[hsl(243,23%,24%)] flex items-center justify-between">
+    <li
+      className={clsx(
+        "p-2 rounded-xl bg-[hsl(243,23%,24%)] flex items-center justify-between",
+        !icon && !temperature && !hour && "p-8"
+      )}
+    >
       <div className="flex items-center">
-        <Image src={icon} alt="icon" width={50} height={50} quality={100} />
+        {icon && (
+          <Image src={icon} alt="icon" width={50} height={50} quality={100} />
+        )}
         <p>{hour}</p>
       </div>
-      <span className="mr-3">{temperature}°</span>
+      {temperature && <span className="mr-3">{temperature}°</span>}
     </li>
   );
 }

@@ -12,27 +12,26 @@ export function Forecast() {
   const { cityWeather } = use(CityContext);
   const [sampleLabels, setSampleLabels] = useState<string[]>();
   const [dayCode, setDayCode] = useState<number>(0);
-  const [daysTemperature, setDaysTemperature] = useState<
-    { temperature: number; hour: string; icon: StaticImageData }[]
-  >([]);
+  const [daysTemperature, setDaysTemperature] =
+    useState<{ temperature: number; hour: string; icon: StaticImageData }[]>();
   useEffect(() => {
     if (cityWeather.hourly) {
       const sampleLabels = [
         ...new Set(
-          cityWeather.hourly.time.map((element) => moment(element).format("L")),
+          cityWeather.hourly.time.map((element) => moment(element).format("L"))
         ),
       ];
       setSampleLabels(
-        sampleLabels.map((element) => moment(element).format("dddd")),
+        sampleLabels.map((element) => moment(element).format("dddd"))
       );
       const formatDate = cityWeather.hourly.time.map((element) =>
-        moment(element).format("l"),
+        moment(element).format("l")
       );
       const index = formatDate.findIndex((element) =>
-        moment(element).isSame(sampleLabels[dayCode]),
+        moment(element).isSame(sampleLabels[dayCode])
       );
       const lastIndex = formatDate.findLastIndex((element) =>
-        moment(element).isSame(sampleLabels[dayCode]),
+        moment(element).isSame(sampleLabels[dayCode])
       );
       const daysTemperatureArray = [];
       for (let i = index; i <= lastIndex; i++) {
@@ -46,26 +45,34 @@ export function Forecast() {
     }
   }, [cityWeather, dayCode]);
   return (
-    <section className="w-full h-full row-span-4 bg-[hsl(243,27%,20%)] text-white rounded-xl px-6 py-4 overflow-y-auto">
+    <section className="w-full row-span-4 max-[1362px]:row-start-7 max-[1362px]:w-[95%] max-[1362px]:mt-10 max-[1362px]:h-50 bg-[hsl(243,27%,20%)] text-white rounded-xl px-6 py-4 overflow-y-auto">
       <div className="flex items-center justify-between h-10">
         <div className="w-full">
           <h6>Hourly forescast</h6>
         </div>
         <Dropdown
-          title={sampleLabels?.[dayCode] ?? moment().format("dddd")}
+          title={sampleLabels?.[dayCode] ?? "-"}
           sampleLabels={sampleLabels}
           setDayCode={setDayCode}
         />
       </div>
       <ul className="mt-4 flex flex-col gap-4">
-        {daysTemperature.map((dt) => (
-          <LabelTemperature
-            key={dt.hour}
-            temperature={dt.temperature.toString()}
-            hour={moment(dt.hour).format("h A").toString()}
-            icon={dt.icon}
-          />
-        ))}
+        {daysTemperature ? (
+          daysTemperature.map((dt) => (
+            <LabelTemperature
+              key={dt.hour}
+              temperature={dt.temperature.toString()}
+              hour={moment(dt.hour).format("h A").toString()}
+              icon={dt.icon}
+            />
+          ))
+        ) : (
+          <>
+            {Array.from({ length: 24 }).map((_, index) => (
+              <LabelTemperature key={index} />
+            ))}
+          </>
+        )}
       </ul>
     </section>
   );

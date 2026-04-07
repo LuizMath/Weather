@@ -59,7 +59,9 @@ export function Dropdown({
           visible ? "border border-solid border-white" : "",
           sampleLabels
             ? "mt-75 bg-[hsl(243,23%,30%)]"
-            : "bg-[hsl(243,27%,20%)]",
+            : labels
+            ? "bg-[hsl(243,27%,20%)]"
+            : "mt-7 bg-[hsl(243,23%,30%)]"
         )}
       >
         {icon && (
@@ -76,7 +78,7 @@ export function Dropdown({
       <div
         className={clsx(
           "w-50 p-2 mt-3 rounded-lg bg-[hsl(243,27%,20%)] shadow-[0px_5px_15px_rgba(0,0,0,0.35)] transition-all duration-200 ease-in flex flex-col gap-2 z-99",
-          visible ? "visible opacity-100" : "invisible opacity-0",
+          visible ? "visible opacity-100" : "invisible opacity-0"
         )}
       >
         {icon && (
@@ -95,7 +97,7 @@ export function Dropdown({
                 className={clsx(
                   "py-1.5 px-1.5 rounded-lg cursor-pointer flex items-center justify-between",
                   options[label.replace(/\//g, "") as keyof Options] &&
-                    "bg-[hsl(243,23%,30%)]",
+                    "bg-[hsl(243,23%,30%)]"
                 )}
                 key={label}
               >
@@ -114,7 +116,7 @@ export function Dropdown({
           <p
             className={clsx(
               "p-1 hover:bg-[hsl(243,23%,30%)] cursor-pointer rounded-lg",
-              title === sampleLabel ? "bg-[hsl(243,23%,30%)]" : "",
+              title === sampleLabel ? "bg-[hsl(243,23%,30%)]" : ""
             )}
             onClick={() => {
               setDayCode!(i);

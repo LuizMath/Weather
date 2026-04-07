@@ -6,12 +6,14 @@ import {
   SyntheticEvent,
   use,
   useActionState,
+  useEffect,
   useState,
   useTransition,
 } from "react";
 import clsx from "clsx";
 import { City } from "@/app/utils/types/city";
 import { CityContext } from "@/app/context/CityContext";
+import moment from "moment";
 
 async function getCityName(name: string) {
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${name}&count=10&language=en&format=json`;
@@ -24,7 +26,7 @@ async function getWeatherForecast(city: City) {
     4
   )}&longitude=${city.longitude.toPrecision(
     4
-  )}&daily=weather_code,temperature_2m_mean,wind_speed_10m_max,temperature_2m_min,temperature_2m_max&hourly=temperature_2m,precipitation,relative_humidity_2m,weather_code`;
+  )}&daily=weather_code,temperature_2m_mean,temperature_2m_min,temperature_2m_max&hourly=temperature_2m,precipitation,relative_humidity_2m,weather_code,wind_speed_10m,apparent_temperature&timezone=America%2FSao_Paulo`;
   const response = await fetch(url);
   return response.json();
 }
@@ -51,8 +53,17 @@ export function Input() {
     const cityPromise = await getWeatherForecast(city);
     console.log(cityPromise);
     setCityWeather(cityPromise);
+    if (country === "") return;
     setVisible(!visible);
   };
+  useEffect(() => {
+    getCityParams({
+      name: "Berlin",
+      latitude: 52.52,
+      longitude: 13.41,
+      country: "Germany",
+    });
+  }, []);
   return (
     <div className="mt-15 max-w-185 w-full flex items-start justify-center flex-col relative">
       <form
